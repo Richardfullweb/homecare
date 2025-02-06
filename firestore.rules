@@ -1,0 +1,65 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Regras para usuários
+    match /users/{userId} {
+      allow read, update: if request.auth != null && request.auth.uid == userId;
+      allow create: if request.auth != null;
+    }
+ 
+    // Regras para notificações
+    match /notifications/{notificationId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow write: if request.auth != null;
+    }
+
+    // Regras para acesso geral a usuários
+    match /users/{document=**} {
+      allow read: if request.auth != null;
+    }
+    
+    // Regras para solicitações de agendamento
+    match /hireRequests/{hireRequestId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update: if request.auth != null;
+    }
+    
+    // Regras para avaliações
+    match /reviews/{reviewId} {
+      allow read: if true;
+      allow create: if request.auth != null;
+    }
+    
+    // Regras para agendamentos
+    match /appointments/{appointmentId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update: if request.auth != null;
+    }
+    
+    // Regras para conversas
+    match /conversations/{conversationId} {
+      allow read: if request.auth != null && request.auth.uid in resource.data.participants;
+      allow create: if request.auth != null;
+    }
+    
+    // Regras para mensagens em conversas
+    match /conversations/{conversationId}/messages/{messageId} {
+      allow read: if request.auth != null && request.auth.uid in get(/databases/$(database)/documents/conversations/$(conversationId)).data.participants;
+      allow create: if request.auth != null;
+    }
+    
+    // Regras para avaliações gerais
+    match /ratings/{rating} {
+      allow read, write: if request.auth != null;
+    }
+    
+    // Regras para avaliações de cuidadores
+    match /caregiverRatings/{caregiverId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+  }
+}
