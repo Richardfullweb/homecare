@@ -84,7 +84,7 @@ const CaregiverDashboard: React.FC = () => {
     cancelled: []
   });
   const [loading, setLoading] = useState(true);
-  const [setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<keyof AppointmentGroup>('pending');
   const [stats, setStats] = useState({
     totalEarnings: 0,
@@ -321,8 +321,8 @@ const CaregiverDashboard: React.FC = () => {
               </p>
             )}
           </div>
-          <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(appointment.status)}`}>
-            {getStatusText(appointment.status)}
+          <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(String(appointment.status))}`}>
+            {getStatusText(String(appointment.status))}
           </span>
         </div>
         
@@ -360,7 +360,8 @@ const CaregiverDashboard: React.FC = () => {
     );
   };
 
-  const getStatusColor = (status: string) => {
+  const getStatusColor = (status: string | null | undefined) => {
+    if (!status) return 'bg-gray-100 text-gray-800';
     switch (status.toLowerCase()) {
       case 'pending':
         return 'bg-yellow-100 text-yellow-800';
@@ -375,7 +376,8 @@ const CaregiverDashboard: React.FC = () => {
     }
   };
 
-  const getStatusText = (status: string) => {
+  const getStatusText = (status: string | null | undefined) => {
+    if (!status) return 'N/A';
     switch (status.toLowerCase()) {
       case 'pending':
         return 'Pendente';
@@ -493,6 +495,10 @@ const CaregiverDashboard: React.FC = () => {
       </div>
     </div>
   );
+};
+
+const testString = (str: string) => {
+  return str.toLowerCase();
 };
 
 export default CaregiverDashboard;
