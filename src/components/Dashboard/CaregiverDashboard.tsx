@@ -84,7 +84,7 @@ const CaregiverDashboard: React.FC = () => {
     cancelled: []
   });
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<keyof AppointmentGroup>('pending');
   const [stats, setStats] = useState({
     totalEarnings: 0,
@@ -117,16 +117,6 @@ const CaregiverDashboard: React.FC = () => {
     }
   };
 
-  const calculateTotalAmount = (startTime: string, endTime: string, hourlyRate: number) => {
-    const [startHour, startMinute] = startTime.split(':').map(Number);
-    const [endHour, endMinute] = endTime.split(':').map(Number);
-    
-    const startDate = new Date(2000, 0, 1, startHour, startMinute);
-    const endDate = new Date(2000, 0, 1, endHour, endMinute);
-    
-    const diffInHours = (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60);
-    return hourlyRate * diffInHours;
-  };
 
   const loadStats = async () => {
     if (!user) return;
@@ -482,9 +472,9 @@ const CaregiverDashboard: React.FC = () => {
                     : 'text-gray-500 hover:text-gray-700'
                 }`}
               >
-                {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                {(tab as string).charAt(0).toUpperCase() + (tab as string).slice(1)}
                 <span className="ml-2 bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-xs">
-                  {appointments[tab as keyof AppointmentGroup].length}
+                  {appointments[tab as 'pending' | 'upcoming' | 'completed' | 'cancelled'].length}
                 </span>
               </button>
             ))}
