@@ -84,7 +84,6 @@ const CaregiverDashboard: React.FC = () => {
     cancelled: []
   });
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<keyof AppointmentGroup>('pending');
   const [stats, setStats] = useState({
     totalEarnings: 0,
@@ -174,7 +173,6 @@ const CaregiverDashboard: React.FC = () => {
   const loadAppointments = async () => {
     if (!user) return;
     setLoading(true);
-    setError('');
 
     try {
       console.log('Carregando agendamentos para:', user.uid);
@@ -237,7 +235,6 @@ const CaregiverDashboard: React.FC = () => {
 
     } catch (error) {
       console.error('Erro ao carregar agendamentos:', error);
-      setError('Falha ao carregar agendamentos');
     } finally {
       setLoading(false);
     }
@@ -298,7 +295,6 @@ const CaregiverDashboard: React.FC = () => {
       
     } catch (err) {
       console.error('Error updating appointment:', err);
-      setError('Falha ao atualizar o agendamento');
     }
   };
 
@@ -455,7 +451,6 @@ const CaregiverDashboard: React.FC = () => {
           <p className="mt-2 text-3xl font-bold text-blue-600">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
           </p>
           <p className="mt-1 text-sm text-gray-500">Candidatar-se a novas vagas</p>
         </Link>

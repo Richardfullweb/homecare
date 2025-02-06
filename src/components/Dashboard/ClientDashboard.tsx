@@ -25,13 +25,18 @@ interface AppointmentGroup {
   cancelled: Appointment[];
 }
 
+interface HireRequest {
+  id: string;
+  [key: string]: any; // Allow other properties
+}
+
 const ClientDashboard: React.FC = () => {
   const [user] = useAuthState(auth);
-  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [appointments, setAppointments] = useState<Appointment[]>(([] as Appointment[]));
   const [loading, setLoading] = useState(true);
   const [selectedAppointment, setSelectedAppointment] = useState<string | null>(null);
   const [error, setError] = useState('');
-  const [hireRequests, setHireRequests] = useState([]);
+  const [hireRequests, setHireRequests] = useState<HireRequest[]>([]);
   const [showRatingModal, setShowRatingModal] = useState(false);
   const [pendingPayments, setPendingPayments] = useState<Appointment[]>([]);
   const [filter, setFilter] = useState<'all' | 'upcoming' | 'completed' | 'cancelled'>('all');
